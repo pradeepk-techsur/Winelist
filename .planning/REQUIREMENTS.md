@@ -110,44 +110,44 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INV-01 | — | Pending |
-| INV-02 | — | Pending |
-| INV-03 | — | Pending |
-| INV-04 | — | Pending |
-| INV-05 | — | Pending |
-| INV-06 | — | Pending |
-| DRK-01 | — | Pending |
-| DRK-02 | — | Pending |
-| DRK-03 | — | Pending |
-| DRK-04 | — | Pending |
-| SRH-01 | — | Pending |
-| SRH-02 | — | Pending |
-| SRH-03 | — | Pending |
-| SRH-04 | — | Pending |
-| SRH-05 | — | Pending |
-| SRH-06 | — | Pending |
-| SRH-07 | — | Pending |
-| SRH-08 | — | Pending |
-| BTL-01 | — | Pending |
-| BTL-02 | — | Pending |
-| BTL-03 | — | Pending |
-| BTL-04 | — | Pending |
-| TST-01 | — | Pending |
-| TST-02 | — | Pending |
-| TST-03 | — | Pending |
-| TST-04 | — | Pending |
-| INS-01 | — | Pending |
-| INS-02 | — | Pending |
-| INS-03 | — | Pending |
-| INS-04 | — | Pending |
-| MOB-01 | — | Pending |
-| MOB-02 | — | Pending |
-| MOB-03 | — | Pending |
+| INV-01 | Phase 1 | Pending |
+| INV-02 | Phase 1 | Pending |
+| INV-03 | Phase 1 | Pending |
+| INV-04 | Phase 1 | Pending |
+| INV-05 | Phase 1 | Pending |
+| INV-06 | Phase 1 | Pending |
+| DRK-01 | Phase 2 | Pending |
+| DRK-02 | Phase 2 | Pending |
+| DRK-03 | Phase 2 | Pending |
+| DRK-04 | Phase 2 | Pending |
+| SRH-01 | Phase 4 | Pending |
+| SRH-02 | Phase 4 | Pending |
+| SRH-03 | Phase 4 | Pending |
+| SRH-04 | Phase 2 | Pending |
+| SRH-05 | Phase 3 | Pending |
+| SRH-06 | Phase 3 | Pending |
+| SRH-07 | Phase 2 | Pending |
+| SRH-08 | Phase 3 | Pending |
+| BTL-01 | Phase 3 | Pending |
+| BTL-02 | Phase 3 | Pending |
+| BTL-03 | Phase 3 | Pending |
+| BTL-04 | Phase 3 | Pending |
+| TST-01 | Phase 5 | Pending |
+| TST-02 | Phase 5 | Pending |
+| TST-03 | Phase 5 | Pending |
+| TST-04 | Phase 5 | Pending |
+| INS-01 | Phase 6 | Pending |
+| INS-02 | Phase 6 | Pending |
+| INS-03 | Phase 6 | Pending |
+| INS-04 | Phase 6 | Pending |
+| MOB-01 | Phase 1 | Pending |
+| MOB-02 | Phase 6 | Pending |
+| MOB-03 | Phase 6 | Pending |
 
 **Coverage:**
 - v1 requirements: 33 total
-- Mapped to phases: 0
-- Unmapped: 33 ⚠️ (will be resolved during roadmap creation)
+- Mapped to phases: 33 ✓
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-05-21*
