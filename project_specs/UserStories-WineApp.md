@@ -130,6 +130,19 @@
 
 ---
 
+### US-0.7: See a "Last Bottle" Warning Before Consuming or Gifting
+**As a** Daniel (Home Entertainer), **I want to** see a clear indicator when I'm looking at my last bottle of a wine, **so that** I can make a conscious decision before opening or giving away a bottle I can't replace.
+
+**Acceptance Criteria:**
+- [ ] When `quantity_owned = 1`, the Wine Detail view displays a visible "Last bottle" indicator near the quantity field
+- [ ] The indicator is passive and non-blocking — it does not require acknowledgment and does not prevent any action
+- [ ] The indicator disappears once `quantity_owned` drops to 0 or increases above 1
+- [ ] The indicator is present before the user taps "Mark as Consumed" or "Mark as Gifted," so they see it before acting
+
+**Priority:** P0 | **Feature Ref:** F0
+
+---
+
 ## Epic 1: Drinking Window Tracking (F1)
 
 *Automatically computes whether each wine is ready to drink, hold, approaching peak, or past its window — solving the most common and costly collector problem.*
@@ -280,14 +293,17 @@
 ---
 
 ### US-3.1: Mark a Bottle as Consumed
-**As a** Marcus (Casual Collector), **I want to** mark a bottle as consumed after I open it, **so that** my quantity count stays accurate and I never reach for a bottle I've already finished.
+**As a** Marcus (Casual Collector), **I want to** mark a bottle (or multiple bottles) as consumed after I open them, **so that** my quantity count stays accurate and I never reach for a bottle I've already finished.
 
 **Acceptance Criteria:**
 - [ ] "Mark as Consumed" action is accessible from the Wine Detail view
 - [ ] A confirmation dialog appears with date consumed defaulting to today (user can change)
-- [ ] Dialog offers an optional shortcut: "Add Tasting Note" (navigates to tasting note form if selected)
-- [ ] On confirmation, quantity owned decrements by 1 and quantity consumed increments by 1
+- [ ] Dialog includes a quantity stepper defaulting to 1; user can increase up to the current `quantity_owned`
+- [ ] Dialog offers an optional shortcut: "Add Tasting Note" (only shown when quantity = 1; navigates to tasting note form if selected)
+- [ ] On confirmation, quantity owned decrements by the selected quantity and quantity consumed increments by the same amount
+- [ ] One `bottle_status_events` record is created per bottle consumed (e.g., selecting quantity 2 creates 2 events)
 - [ ] The system rejects the action if quantity owned is already 0, with message "No bottles remaining"
+- [ ] The system rejects the action if selected quantity exceeds quantity owned
 - [ ] Event date cannot be set to a future date
 - [ ] Updated quantities are reflected in the Wine Detail view immediately after confirmation
 
@@ -584,7 +600,9 @@
 - [ ] All form inputs have visible, associated label elements
 - [ ] Error messages are descriptive and associated with the relevant input field
 - [ ] Status badges and icons include accessible text alternatives — critical information is never icon-only
-- [ ] The app is installable as a PWA with a proper web app manifest (name, icons, display: standalone)
+- [ ] The app ships a valid `manifest.json` containing: app `name`, `short_name`, at least one 192×192px icon and one 512×512px icon, `display: standalone`, and a `theme_color`
+- [ ] The app passes the Chrome Lighthouse PWA installability check (no critical manifest or service worker errors)
+- [ ] The app includes `<meta name="viewport" content="width=device-width, initial-scale=1">` on all pages
 
 **Priority:** P0 | **Feature Ref:** F6
 
@@ -600,6 +618,7 @@
 | US-0.4 | View a Wine's Full Detail | Claire | P0 | F0 |
 | US-0.5 | Edit an Existing Wine Record | Vivienne | P0 | F0 |
 | US-0.6 | Delete a Wine Record | Marcus | P0 | F0 |
+| US-0.7 | See a "Last Bottle" Warning | Daniel | P0 | F0 |
 | US-1.1 | Define a Drinking Window for a Wine | Claire | P0 | F1 |
 | US-1.2 | See Automatically Computed Drinking Status | Daniel | P0 | F1 |
 | US-1.3 | View the "Ready to Drink" List | Claire | P0 | F1 |
@@ -636,9 +655,9 @@
 
 | Priority | Count | Stories |
 |----------|-------|---------|
-| P0 — Critical | 26 | US-0.1 through US-0.6, US-1.1 through US-1.4, US-2.1 through US-2.5, US-3.1 through US-3.4, US-6.1 through US-6.6 |
+| P0 — Critical | 27 | US-0.1 through US-0.7, US-1.1 through US-1.4, US-2.1 through US-2.5, US-3.1 through US-3.4, US-6.1 through US-6.6 |
 | P1 — High | 9 | US-4.1 through US-4.5, US-5.1 through US-5.5 |
-| **Total** | **35** | |
+| **Total** | **36** | |
 
 ---
 
@@ -646,7 +665,7 @@
 
 | Feature | Stories | All PRD Capabilities Covered? |
 |---------|---------|-------------------------------|
-| F0 — Wine Inventory Management | US-0.1 – US-0.6 | Yes |
+| F0 — Wine Inventory Management | US-0.1 – US-0.7 | Yes |
 | F1 — Drinking Window Tracking | US-1.1 – US-1.4 | Yes |
 | F2 — Search and Filter | US-2.1 – US-2.5 | Yes |
 | F3 — Bottle Status Tracking | US-3.1 – US-3.4 | Yes |

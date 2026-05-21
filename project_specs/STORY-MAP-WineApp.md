@@ -75,6 +75,7 @@ This Story Map organizes all 35 WineApp user stories into a two-dimensional grid
 | SM-0.4 | PER-02 Claire | S3: Find / Browse | Review all detail for a single wine | Epic 0 (F0) | **US-0.4** View a Wine's Full Detail | JTBD-02.1: "Know which to drink now" → Detail view shows computed drinking status prominently; all optional fields shown if set; tasting notes listed; renders ≤1s | R1 |
 | SM-0.5 | PER-04 Vivienne | S3: Find / Browse | Edit a field after initial entry | Epic 0 (F0) | **US-0.5** Edit an Existing Wine Record | JTBD-04.2: "Complete precise inventory" → Edit form pre-populated with all current values; all fields modifiable; updated_at refreshed; validation identical to add form | R1 |
 | SM-0.6 | PER-01 Marcus | S3: Find / Browse | Remove a wine no longer in collection | Epic 0 (F0) | **US-0.6** Delete a Wine Record | JTBD-01.2: "Keep collection current" → Delete requires explicit confirmation dialog; confirmed deletion removes record and all tasting notes; user navigated to Wine List | R1 |
+| SM-0.7 | PER-03 Daniel | S3: Find / Browse | See last-bottle warning before consuming or gifting | Epic 0 (F0) | **US-0.7** See a "Last Bottle" Warning | JTBD-03.1: "Pick the right bottle — avoid costly mistakes" → When quantity_owned = 1, a visible non-blocking "Last bottle" indicator appears on the Wine Detail view before the user acts | R1 |
 | SM-2.1 | PER-01 Marcus | S3: Find / Browse | Search by name/producer/region as user types | Epic 2 (F2) | **US-2.1** Search by Name, Producer, or Region | JTBD-01.1: "Confirm ownership in <10s at a shop" → Search bar persistently visible on Wine List; results update within 500ms; partial, case-insensitive matches across name, producer, region, notes | R1 |
 | SM-2.2 | PER-03 Daniel | S3: Find / Browse | Filter by wine type and attributes for dinner | Epic 2 (F2) | **US-2.2** Filter by Wine Type and Attributes | JTBD-03.1: "Pick right bottle before guests arrive" → Type filter (Red/White/Rosé/Sparkling) accessible in one tap; all active filters apply immediately; badge shows active filter count | R1 |
 | SM-2.3 | PER-02 Claire | S3: Find / Browse | Filter to a specific drinking status | Epic 2 (F2) | **US-2.3** Filter by Drinking Status | JTBD-02.1: "Identify bottles needing attention soon" → Drinking status multi-select in filter panel; "Approaching Peak" filter shows wines within 2 years of window start; filter state persists when navigating to detail | R1 |
@@ -158,7 +159,7 @@ Full traceability: JTBD outcome → Journey stage → NaC statement → User Sto
 
 **Theme:** Every persona can perform their most critical job end-to-end. A user with an existing collection can log bottles, find any wine, understand its readiness, and keep inventory accurate — entirely on mobile.
 
-**Stories:** 26 stories (all P0)
+**Stories:** 27 stories (all P0)
 
 **Persona Journey Completion in R1:**
 - **PER-01 Marcus:** Complete — can add, search, view, consume, and delete bottles
@@ -174,6 +175,7 @@ Full traceability: JTBD outcome → Journey stage → NaC statement → User Sto
 | US-0.4 | View Wine Detail | S3 | JTBD-02.1 |
 | US-0.5 | Edit Wine Record | S3 | JTBD-04.2 |
 | US-0.6 | Delete Wine Record | S3 | JTBD-01.2 |
+| US-0.7 | Last Bottle Warning | S3 | JTBD-03.1 |
 | US-1.1 | Define Drinking Window | S2 | JTBD-02.1 |
 | US-1.2 | Auto-Computed Drinking Status | S4 | JTBD-03.1 |
 | US-1.3 | Ready to Drink List | S4 | JTBD-02.1 |
@@ -194,7 +196,7 @@ Full traceability: JTBD outcome → Journey stage → NaC statement → User Sto
 | US-6.5 | Fast Load Times | S1 | JTBD-01.1 |
 | US-6.6 | Accessible Interface | S1 | JTBD-02.1 |
 
-**JTBD Fully Addressed in R1:** JTBD-01.1, JTBD-01.2, JTBD-02.1 (partial — no tasting journal), JTBD-03.1, JTBD-03.2, JTBD-04.1 (partial — no drill-down insights), JTBD-04.2
+**JTBD Fully Addressed in R1:** JTBD-01.1, JTBD-01.2, JTBD-02.1 (partial — no tasting journal), JTBD-03.1 (now includes last-bottle warning), JTBD-03.2 (now includes multi-bottle consume), JTBD-04.1 (partial — no drill-down insights), JTBD-04.2
 
 ---
 
@@ -235,7 +237,7 @@ Full traceability: JTBD outcome → Journey stage → NaC statement → User Sto
 |---------|--------------------|--------------|--------------------|-------------|
 | PER-01 Marcus | JRN-01.1, JRN-01.2 | ✅ Yes | JRN-02.2 (insights partial) | ✅ Yes |
 | PER-02 Claire | JRN-02.1 (window+list), JRN-02.2 (filter only) | Partial | JRN-02.1 (tasting note), JRN-02.2 (insights) | ✅ Yes |
-| PER-03 Daniel | JRN-03.1, JRN-03.2 (consume/gift) | Partial | JRN-03.2 (pairing note), JRN dashboard | ✅ Yes |
+| PER-03 Daniel | JRN-03.1 (incl. last-bottle warning), JRN-03.2 (consume/gift with multi-bottle) | Partial | JRN-03.2 (pairing note), JRN dashboard | ✅ Yes |
 | PER-04 Vivienne | JRN-04.1 (add + status), JRN-04.2 (filter/readiness) | Partial | JRN-04.1 (insights update), JRN-04.2 (composition) | ✅ Yes |
 
 ### 6.2 JTBD Coverage Per Release
@@ -263,7 +265,7 @@ Full traceability: JTBD outcome → Journey stage → NaC statement → User Sto
 |-------|-------------|-------------|------|
 | S1: Launch & Navigate | US-6.1, 6.2, 6.5, 6.6 | — | None |
 | S2: Add a Bottle | US-0.1, 0.2, 1.1, 1.4, 6.3 | — | None |
-| S3: Find / Browse | US-0.3, 0.4, 0.5, 0.6, 2.1–2.5, 6.4 | — | None |
+| S3: Find / Browse | US-0.3, 0.4, 0.5, 0.6, 0.7, 2.1–2.5, 6.4 | — | None |
 | S4: Check Readiness | US-1.2, 1.3 | — | None |
 | S5: Consume a Bottle | US-3.1–3.4 | — | None |
 | S6: Record Tasting Note | — | US-4.1–4.5 | R1 has no tasting note capture; users can mark consumed but not record impressions until R2 |
@@ -278,6 +280,8 @@ Full traceability: JTBD outcome → Journey stage → NaC statement → User Sto
 - **Wishlist / buying intent:** JRN-02.2 Stage 5 notes the absence of a "want to buy" list. This is not addressed in either release — it is explicitly deferred to Phase 2 per PRD §9.
 - **Drinking window alerts:** JRN-04.2 Stage 5 notes that pro-active alerts for approaching peak windows are not in scope. Monthly dashboard review (R2) is the mitigating workflow.
 - **Gift bottle quick-add (CP-04):** The "add-and-immediately-consume" shortcut for unlisted gift bottles (identified in JRN-03.2 Stage 4 as a known failure mode) is not directly addressed by any current story. The closest coverage is US-0.1 + US-3.1 in sequence. This is a **UX gap to flag** for the next sprint planning cycle.
+- **Multi-bottle consume (CP-03 related):** US-3.1 now includes a quantity stepper so Daniel can mark multiple bottles consumed in a single action (e.g., 2 Riojas after a dinner party). The FRD F03-A and API have been updated accordingly.
+- **Last bottle alert (CP-06):** US-0.7 (added) addresses the risk of opening the last bottle of a wine unknowingly. A passive non-blocking indicator is shown on the Wine Detail view when `quantity_owned = 1`.
 
 **Orphan Stories:** None. All 35 stories are mapped to at least one journey stage.
 
@@ -316,6 +320,7 @@ Spot-check verifying that NaC statements are consistent with the formal acceptan
 | US-0.4 | View Wine Detail | S3 | Claire | R1 |
 | US-0.5 | Edit Wine Record | S3 | Vivienne | R1 |
 | US-0.6 | Delete Wine Record | S3 | Marcus | R1 |
+| US-0.7 | Last Bottle Warning | S3 | Daniel | R1 |
 | US-1.1 | Define Drinking Window | S2 | Claire | R1 |
 | US-1.2 | Auto-Computed Status Badges | S4 | Daniel | R1 |
 | US-1.3 | Ready to Drink List | S4 | Claire | R1 |

@@ -124,6 +124,7 @@ WineApp v1 uses single-user authentication. All API endpoints require a valid se
 1. User taps on a wine card in the list.
 2. System fetches the full wine record including all fields and associated tasting notes.
 3. System renders the Wine Detail view with all data fields, drinking status, tasting notes list, and action buttons (Edit, Delete, Mark as Consumed/Gifted).
+4. If `quantity_owned = 1`, the system displays a passive "Last bottle" indicator near the quantity field (e.g., "⚠ Last bottle"). This indicator is non-blocking — it does not prevent any action. It is visible before the user taps "Mark as Consumed" or "Mark as Gifted" so they can make an informed decision.
 
 #### F00-D: Edit Wine
 1. From the Wine Detail view, user taps "Edit."
@@ -571,12 +572,13 @@ No new tables. Uses `wines` table — see `Y0-schema.md §wines`.
 1. From the Wine Detail view (F00-C), user taps "Mark as Consumed" (or "Open a Bottle").
 2. System presents a brief confirmation/annotation dialog with:
    - Date consumed (defaults to today; user can change)
-   - Option to "Add Tasting Note" (optional shortcut to F04 flow)
+   - Quantity to consume (defaults to 1; user can increase up to `quantity_owned` via a stepper control)
+   - Option to "Add Tasting Note" (optional shortcut to F04 flow; only shown when quantity = 1, as a single note covers one bottle opening)
 3. User confirms.
-4. System creates a `bottle_status_events` record: `event_type = consumed`, `event_date`, `wine_id`.
-5. System decrements `wines.quantity_owned` by 1 (must not go below 0).
-6. System increments `wines.quantity_consumed` by 1.
-7. If user chose to add a tasting note, system transitions to the Tasting Note form (F04) with `wine_id` and `event_date` pre-populated.
+4. System creates one `bottle_status_events` record per bottle consumed: `event_type = consumed`, `event_date`, `wine_id`. If quantity = 2, two separate event records are created with the same date.
+5. System decrements `wines.quantity_owned` by the selected quantity (must not go below 0).
+6. System increments `wines.quantity_consumed` by the selected quantity.
+7. If user chose to add a tasting note (only available when quantity = 1), system transitions to the Tasting Note form (F04) with `wine_id` and `event_date` pre-populated.
 8. System returns to Wine Detail view showing updated quantities.
 
 #### F03-B: Mark as Gifted
@@ -617,7 +619,8 @@ No new tables. Uses `wines` table — see `Y0-schema.md §wines`.
 **Mark as Consumed:**
 - `wine_id` (integer, required): The wine record to act on
 - `event_date` (date, required): Date consumed; defaults to today; format `YYYY-MM-DD`
-- `add_tasting_note` (boolean, optional): If true, immediately proceed to tasting note form
+- `quantity` (integer, optional): Number of bottles consumed in this action; must be ≥ 1 and ≤ `quantity_owned`; defaults to 1
+- `add_tasting_note` (boolean, optional): If true, immediately proceed to tasting note form; only valid when `quantity = 1`
 
 **Mark as Gifted:**
 - `wine_id` (integer, required): The wine record to act on
@@ -642,7 +645,8 @@ No new tables. Uses `wines` table — see `Y0-schema.md §wines`.
 
 - `wine_id`: Must reference an existing wine record owned by the authenticated user.
 - `event_date`: Must be a valid `YYYY-MM-DD` date; cannot be in the future.
-- `quantity_owned` at time of event: Must be ≥ 1 before decrement (cannot go below 0).
+- `quantity` (consume only): Must be a positive integer ≥ 1; must not exceed `quantity_owned` at the time of the request.
+- `quantity_owned` at time of event: After decrement, must remain ≥ 0 (system rejects if `quantity_owned < quantity`).
 - `recipient_name`: Max 255 characters if provided.
 - Undo `event_id`: Must reference an existing `bottle_status_events` record for the authenticated user.
 
@@ -653,6 +657,7 @@ No new tables. Uses `wines` table — see `Y0-schema.md §wines`.
 | Scenario | HTTP Status | Error Code | Message |
 |----------|-------------|------------|---------|
 | No bottles remaining to consume/gift | 422 | `BOTTLE_NONE_REMAINING` | "No bottles remaining. quantity_owned is already 0." |
+| quantity exceeds quantity_owned | 422 | `BOTTLE_QUANTITY_EXCEEDS_OWNED` | "quantity cannot exceed quantity_owned ([n] available)" |
 | event_date in the future | 422 | `BOTTLE_INVALID_DATE` | "Event date cannot be in the future" |
 | Wine record not found | 404 | `WINE_NOT_FOUND` | "Wine record not found" |
 | Status event not found (undo) | 404 | `EVENT_NOT_FOUND` | "Status event not found" |
@@ -1152,6 +1157,8 @@ F06 has no dedicated database tables or columns.
 
 ## Y0: Database Schema
 
+> **Note:** This section contains implementation-level DDL that will be superseded by `TechArch-WineApp.md` when that document is generated. Until then, this serves as the authoritative schema reference.
+
 **Scope:** Full DDL for all WineApp v1 entities. Written as PostgreSQL-compatible SQL with SQLite compatibility notes where they differ.
 
 ---
@@ -1380,6 +1387,8 @@ CREATE INDEX idx_sessions_expires_at ON sessions(expires_at);
 ---
 
 ## Y1: REST API Endpoints
+
+> **Note:** This section contains implementation-level API contracts that will be superseded by `TechArch-WineApp.md` when that document is generated. Until then, this serves as the authoritative API reference.
 
 **Base URL:** `/api`
 **Authentication:** All endpoints require a valid session token. Token is passed as:
@@ -1629,18 +1638,22 @@ Mark one bottle as consumed. Decrements quantity_owned, increments quantity_cons
 
 **Request body:**
 ```json
-{ "event_date": "2026-05-21", "add_tasting_note": false }
+{ "event_date": "2026-05-21", "quantity": 1, "add_tasting_note": false }
 ```
+- `quantity`: Optional integer ≥ 1; defaults to 1; must not exceed `quantity_owned`. When > 1, one `bottle_status_events` record is created per bottle consumed.
+
 **Response 200:**
 ```json
 {
   "data": {
     "wine": { "id": 42, "quantity_owned": 2, "quantity_consumed": 2, ... },
-    "event": { "id": 15, "event_type": "consumed", "event_date": "2026-05-21", "wine_id": 42 }
+    "events": [
+      { "id": 15, "event_type": "consumed", "event_date": "2026-05-21", "wine_id": 42 }
+    ]
   }
 }
 ```
-**Errors:** `422 BOTTLE_NONE_REMAINING`, `422 BOTTLE_INVALID_DATE`, `404 WINE_NOT_FOUND`, `401 AUTH_REQUIRED`
+**Errors:** `422 BOTTLE_NONE_REMAINING`, `422 BOTTLE_QUANTITY_EXCEEDS_OWNED`, `422 BOTTLE_INVALID_DATE`, `404 WINE_NOT_FOUND`, `401 AUTH_REQUIRED`
 
 ---
 
@@ -1806,6 +1819,8 @@ Fetch all collection insights in a single response.
 
 ## Y2: Cross-Feature Error Catalog
 
+> **Note:** This section will be superseded by `TechArch-WineApp.md` when that document is generated. Until then, this serves as the authoritative error catalog.
+
 **Scope:** All error codes used across WineApp v1 features. Error codes follow the pattern `DOMAIN_CONDITION`. All error responses use the standard envelope:
 
 ```json
@@ -1867,6 +1882,7 @@ For validation errors (422), the `fields` object maps each failing field to its 
 | Error Code | HTTP Status | Description | Field |
 |------------|-------------|-------------|-------|
 | `BOTTLE_NONE_REMAINING` | 422 | quantity_owned is already 0; cannot consume or gift | — |
+| `BOTTLE_QUANTITY_EXCEEDS_OWNED` | 422 | quantity requested exceeds quantity_owned | `quantity` |
 | `BOTTLE_INVALID_DATE` | 422 | event_date is in the future | `event_date` |
 | `EVENT_NOT_FOUND` | 404 | No bottle_status_events record with this ID for this user | — |
 
@@ -1931,6 +1947,8 @@ For validation errors (422), the `fields` object maps each failing field to its 
 ---
 
 ## Y3: External Integration Points
+
+> **Note:** This section contains infrastructure and integration decisions that will be superseded by `TechArch-WineApp.md` when that document is generated. Until then, this serves as the authoritative integration reference.
 
 **Scope:** All external system dependencies and integration contracts for WineApp v1. This document covers authentication, hosting infrastructure, and frontend delivery. WineApp v1 has minimal external integrations by design — the personal-use MVP is intentionally self-contained.
 
