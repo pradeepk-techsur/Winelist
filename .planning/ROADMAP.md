@@ -31,7 +31,15 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. User can open a wine detail page and see all fields for a single wine record
   4. User can edit any field on an existing wine record and see the update reflected immediately
   5. User can delete a wine record (with confirmation) and it no longer appears in the list; system tracks quantity owned and consumed separately per wine
-**Plans**: TBD
+**Plans**: 6 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Bootstrap Next.js 15 + Turbopack, Serwist PWA scaffold, auth (httpOnly cookie), offline fallback page
+- [ ] 01-02-PLAN.md — Drizzle schema + Turso migration, Dexie local schema, Zod validation schemas, shared types
+- [ ] 01-03-PLAN.md — Server Actions: addWine, updateWine, deleteWine, getWines, addConsumptionEvent
+- [ ] 01-04-PLAN.md — Offline sync infrastructure: sync service, useNetworkStatus, /api/ping, OfflineBanner, SyncIndicator, SyncProvider
+- [ ] 01-05-PLAN.md — App layout + bottom nav + useWines hook + WineCard + WineStatusBadge + cellar page
+- [ ] 01-06-PLAN.md — WineForm + WineDrawer + useWineActions (offline-first) + wine detail page + delete with confirmation
 
 ### Phase 2: Drinking Windows & Status
 **Goal**: Users can understand at a glance when each wine in their collection is best to drink, and see a dedicated list of wines ready to enjoy right now
@@ -97,7 +105,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core Inventory | 0/TBD | Not started | - |
+| 1. Core Inventory | 0/6 | Not started | - |
 | 2. Drinking Windows & Status | 0/TBD | Not started | - |
 | 3. Bottle Lifecycle | 0/TBD | Not started | - |
 | 4. Search & Discovery | 0/TBD | Not started | - |
