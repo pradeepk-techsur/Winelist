@@ -3,6 +3,7 @@ import { getSession } from "@/lib/auth/session";
 import { MobileNav } from "@/components/layout/MobileNav";
 import { OfflineBanner } from "@/components/layout/OfflineBanner";
 import { SyncProvider } from "@/components/providers/SyncProvider";
+import { WineDrawer } from "@/components/wine/WineDrawer";
 
 export default async function AppLayout({
   children,
@@ -21,6 +22,7 @@ export default async function AppLayout({
         <OfflineBanner />
         <main className="flex-1 pb-20 overflow-y-auto">{children}</main>
         <MobileNav />
+        <WineDrawer />
       </div>
     </SyncProvider>
   );
