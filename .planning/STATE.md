@@ -2,16 +2,16 @@
 pivota_spec_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: planning
-stopped_at: Completed 01-core-inventory-01-PLAN.md
-last_updated: "2026-05-22T01:22:16.911Z"
-last_activity: 2026-05-21 — Roadmap created; 33 v1 requirements mapped to 6 phases
+status: executing
+stopped_at: Completed 01-core-inventory-03-PLAN.md
+last_updated: "2026-05-22T01:28:01.043Z"
+last_activity: 2026-05-22 — Completed 01-01 (Foundation + PWA Shell + Auth)
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 6
-  completed_plans: 2
-  percent: 0
+  completed_plans: 3
+  percent: 33
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-05-21)
 ## Current Position
 
 Phase: 1 of 6 (Core Inventory)
-Plan: 1 of TBD in current phase (01-01 complete)
-Status: In progress — ready for Plan 01-02 (Data Layer)
-Last activity: 2026-05-22 — Completed 01-01 (Foundation + PWA Shell + Auth)
+Plan: 3 of TBD in current phase (01-01, 01-02, 01-03 complete)
+Status: In progress — ready for Plan 01-04 (Wine List UI)
+Last activity: 2026-05-22 — Completed 01-03 (Server Actions)
 
-Progress: [███░░░░░░░] 33%
+Progress: [█████░░░░░] 50%
 
 ## Performance Metrics
 
@@ -54,6 +54,7 @@ Progress: [███░░░░░░░] 33%
 *Updated after each plan completion*
 | Phase 01-core-inventory P02 | 3min | 2 tasks | 12 files |
 | Phase 01-core-inventory P01 | 15min | 2 tasks | 25 files |
+| Phase 01-core-inventory P03 | 2min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,9 @@ Recent decisions affecting current work:
 - [Phase 01-core-inventory]: z.infer<typeof WineFormSchema> for shared types — not InferSelectModel to prevent server bundle leakage
 - [Phase 01-core-inventory]: Used @serwist/turbopack (NOT @serwist/next) for Turbopack PWA compatibility — incompatible packages would silently fail service worker compilation
 - [Phase 01-core-inventory]: jose used for JWT in both middleware (edge runtime) and server components — avoids Node.js crypto dependency issues
+- [Phase 01-core-inventory]: deleteWine uses soft delete (status='spoiled') not physical db.delete() per CONTEXT.md data model
+- [Phase 01-core-inventory]: addConsumptionEvent is append-only — consumption history is immutable once recorded
+- [Phase 01-core-inventory]: Quantity decrement uses SQL MAX(0, quantity - N) to floor at zero without application-level check
 
 ### Pending Todos
 
@@ -83,6 +87,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-22T01:22:16.910Z
-Stopped at: Completed 01-core-inventory-01-PLAN.md
+Last session: 2026-05-22T01:28:01.042Z
+Stopped at: Completed 01-core-inventory-03-PLAN.md
 Resume file: None
