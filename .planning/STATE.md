@@ -3,14 +3,14 @@ pivota_spec_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: planning
-stopped_at: Phase 1 context gathered
-last_updated: "2026-05-21T21:27:12.607Z"
+stopped_at: Completed 01-core-inventory-02-PLAN.md
+last_updated: "2026-05-22T01:10:04.160Z"
 last_activity: 2026-05-21 — Roadmap created; 33 v1 requirements mapped to 6 phases
 progress:
   total_phases: 6
   completed_phases: 0
-  total_plans: 0
-  completed_plans: 0
+  total_plans: 6
+  completed_plans: 1
   percent: 0
 ---
 
@@ -52,6 +52,7 @@ Progress: [░░░░░░░░░░] 0%
 - Trend: —
 
 *Updated after each plan completion*
+| Phase 01-core-inventory P02 | 3min | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -64,6 +65,10 @@ Recent decisions affecting current work:
 - Project init: Single-user personal app; no multi-user auth in v1
 - Project init: Manual data entry only; no camera or AI auto-fill in v1
 - Project init: Drinking status computed at read time (never stored)
+- [Phase 01-core-inventory]: Use drizzle-orm/libsql/web (not /libsql) for Next.js serverless/edge compatibility
+- [Phase 01-core-inventory]: server-only as first import in lib/db/index.ts prevents TURSO_AUTH_TOKEN leaking to client bundle
+- [Phase 01-core-inventory]: Removed db:push script — enforce generate+migrate workflow from day 1 (PITFALLS Pitfall 7)
+- [Phase 01-core-inventory]: z.infer<typeof WineFormSchema> for shared types — not InferSelectModel to prevent server bundle leakage
 
 ### Pending Todos
 
@@ -75,6 +80,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-21T21:27:12.606Z
-Stopped at: Phase 1 context gathered
-Resume file: .planning/phases/01-core-inventory/01-CONTEXT.md
+Last session: 2026-05-22T01:10:04.159Z
+Stopped at: Completed 01-core-inventory-02-PLAN.md
+Resume file: None
