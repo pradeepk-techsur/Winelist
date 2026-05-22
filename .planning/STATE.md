@@ -21,7 +21,7 @@ progress:
 See: .planning/PROJECT.md (updated 2026-05-21)
 
 **Core value:** A wine collector can always know what they own, where it is stored, when to drink it, and which bottle best fits the moment — all from a single, elegant, mobile-friendly app.
-**Current focus:** Phase 1 — Core Inventory
+**Current focus:** Phase 2 — Drinking Windows & Status (next)
 
 ## Current Position
 

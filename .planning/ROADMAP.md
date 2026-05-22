@@ -12,7 +12,7 @@ Six phases that build a complete personal wine cellar app from the data foundati
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Core Inventory** - Wine record CRUD, data model, auth, and responsive layout foundation
+- [x] **Phase 1: Core Inventory** - Wine record CRUD, data model, auth, and responsive layout foundation
 - [ ] **Phase 2: Drinking Windows & Status** - Readiness intelligence, status badges, Ready to Drink list, and status-based filtering/sorting
 - [ ] **Phase 3: Bottle Lifecycle** - Consume/gift tracking, quantity management, price/location filters, and clear filters
 - [ ] **Phase 4: Search & Discovery** - Full-text search, wine type filter, and attribute filters (region, country, vintage, grape)
@@ -22,7 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Core Inventory
-**Status**: In Progress
+**Status**: Complete
 **Goal**: Users can manage their complete wine collection — adding, viewing, editing, and deleting wine records — from a responsive mobile-friendly interface
 **Depends on**: Nothing (first phase)
 **Requirements**: INV-01, INV-02, INV-03, INV-04, INV-05, INV-06, MOB-01
@@ -106,7 +106,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Core Inventory | 0/6 | Not started | - |
+| 1. Core Inventory | 6/6 | Complete | 2026-05-22 |
 | 2. Drinking Windows & Status | 0/TBD | Not started | - |
 | 3. Bottle Lifecycle | 0/TBD | Not started | - |
 | 4. Search & Discovery | 0/TBD | Not started | - |
