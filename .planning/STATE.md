@@ -3,15 +3,15 @@ pivota_spec_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-core-inventory-03-PLAN.md
-last_updated: "2026-05-22T01:28:01.043Z"
-last_activity: 2026-05-22 — Completed 01-01 (Foundation + PWA Shell + Auth)
+stopped_at: Completed 01-core-inventory-04-PLAN.md
+last_updated: "2026-05-22T01:35:58.798Z"
+last_activity: 2026-05-22 — Completed 01-03 (Server Actions)
 progress:
   total_phases: 6
   completed_phases: 0
   total_plans: 6
-  completed_plans: 3
-  percent: 33
+  completed_plans: 4
+  percent: 50
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-05-21)
 ## Current Position
 
 Phase: 1 of 6 (Core Inventory)
-Plan: 3 of TBD in current phase (01-01, 01-02, 01-03 complete)
-Status: In progress — ready for Plan 01-04 (Wine List UI)
-Last activity: 2026-05-22 — Completed 01-03 (Server Actions)
+Plan: 4 of TBD in current phase (01-01, 01-02, 01-03, 01-04 complete)
+Status: In progress — ready for Plan 01-05 (Wine List UI)
+Last activity: 2026-05-22 — Completed 01-04 (Offline Sync Infrastructure)
 
-Progress: [█████░░░░░] 50%
+Progress: [███████░░░] 67%
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Progress: [█████░░░░░] 50%
 | Phase 01-core-inventory P02 | 3min | 2 tasks | 12 files |
 | Phase 01-core-inventory P01 | 15min | 2 tasks | 25 files |
 | Phase 01-core-inventory P03 | 2min | 2 tasks | 2 files |
+| Phase 01-core-inventory P04 | 8min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,8 @@ Recent decisions affecting current work:
 - [Phase 01-core-inventory]: deleteWine uses soft delete (status='spoiled') not physical db.delete() per CONTEXT.md data model
 - [Phase 01-core-inventory]: addConsumptionEvent is append-only — consumption history is immutable once recorded
 - [Phase 01-core-inventory]: Quantity decrement uses SQL MAX(0, quantity - N) to floor at zero without application-level check
+- [Phase 01-core-inventory]: Two-signal network detection: navigator.onLine for offline banner, /api/ping probe before sync trigger — solves captive portal problem per PITFALLS.md Pitfall 6
+- [Phase 01-core-inventory]: OfflineBanner delayed 3s to avoid flicker on brief network hiccups per PITFALLS.md UX section
 
 ### Pending Todos
 
@@ -87,6 +90,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-22T01:28:01.042Z
-Stopped at: Completed 01-core-inventory-03-PLAN.md
+Last session: 2026-05-22T01:35:58.797Z
+Stopped at: Completed 01-core-inventory-04-PLAN.md
 Resume file: None
