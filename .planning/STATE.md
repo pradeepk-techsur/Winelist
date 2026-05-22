@@ -3,15 +3,15 @@ pivota_spec_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-core-inventory-05-PLAN.md
-last_updated: "2026-05-22T01:40:57.104Z"
-last_activity: 2026-05-22 — Completed 01-04 (Offline Sync Infrastructure)
+stopped_at: Completed 01-core-inventory-06-PLAN.md
+last_updated: "2026-05-22T01:51:19.475Z"
+last_activity: 2026-05-22 — Completed 01-06 (Wine Form + CRUD Operations)
 progress:
   total_phases: 6
-  completed_phases: 0
+  completed_phases: 1
   total_plans: 6
-  completed_plans: 5
-  percent: 83
+  completed_plans: 6
+  percent: 100
 ---
 
 # Project State
@@ -25,12 +25,12 @@ See: .planning/PROJECT.md (updated 2026-05-21)
 
 ## Current Position
 
-Phase: 1 of 6 (Core Inventory)
-Plan: 5 of 6 in current phase (01-01, 01-02, 01-03, 01-04, 01-05 complete)
-Status: In progress — ready for Plan 01-06 (Wine Form + Add/Edit)
-Last activity: 2026-05-22 — Completed 01-05 (Wine List UI + Bottom Nav)
+Phase: 1 of 6 (Core Inventory) — COMPLETE
+Plan: 6 of 6 in current phase (01-01, 01-02, 01-03, 01-04, 01-05, 01-06 all complete)
+Status: Phase 1 complete — ready for Phase 2 planning
+Last activity: 2026-05-22 — Completed 01-06 (Wine Form + CRUD Operations)
 
-Progress: [████████░░] 83%
+Progress: [██████████] 100%
 
 ## Performance Metrics
 
@@ -57,6 +57,7 @@ Progress: [████████░░] 83%
 | Phase 01-core-inventory P03 | 2min | 2 tasks | 2 files |
 | Phase 01-core-inventory P04 | 8min | 2 tasks | 9 files |
 | Phase 01-core-inventory P05 | 9min | 2 tasks | 13 files |
+| Phase 01-core-inventory P06 | 6min | 2 tasks | 11 files |
 
 ## Accumulated Context
 
@@ -82,6 +83,8 @@ Recent decisions affecting current work:
 - [Phase 01-core-inventory]: OfflineBanner delayed 3s to avoid flicker on brief network hiccups per PITFALLS.md UX section
 - [Phase 01-core-inventory]: useLiveQuery returns { wines, isLoading, isEmpty } — undefined is loading NOT empty (never wines ?? [])
 - [Phase 01-core-inventory]: Bottom tab bar (fixed bottom) used for mobile navigation — not hamburger/sidebar per ARCHITECTURE.md
+- [Phase 01-core-inventory]: zodResolver(WineFormSchema) cast as any — Zod 4 + react-hook-form v7 Resolver generic type incompatibility; runtime works correctly, TypeScript suppressed at single call site
+- [Phase 01-core-inventory]: shadcn CLI incompatible with environment (pnpm not installed) — UI components created manually from shadcn source; vaul and radix packages installed via npm
 
 ### Pending Todos
 
@@ -93,6 +96,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-05-22T01:40:57.102Z
-Stopped at: Completed 01-core-inventory-05-PLAN.md
+Last session: 2026-05-22T01:51:19.474Z
+Stopped at: Completed 01-core-inventory-06-PLAN.md
 Resume file: None
