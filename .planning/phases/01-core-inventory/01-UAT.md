@@ -1,9 +1,9 @@
 ---
-status: complete
+status: diagnosed
 phase: 01-core-inventory
 source: 01-01-SUMMARY.md, 01-02-SUMMARY.md, 01-03-SUMMARY.md, 01-04-SUMMARY.md, 01-05-SUMMARY.md, 01-06-SUMMARY.md
 started: 2026-05-26T00:00:00Z
-updated: 2026-05-26T00:30:00Z
+updated: 2026-05-26T00:45:00Z
 ---
 
 ## Current Test
@@ -91,17 +91,28 @@ skipped: 2
   reason: "User reported: does not redirect"
   severity: major
   test: 1
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "logoutAction is defined in actions.ts but never wired to any UI component — no logout button exists in MobileNav or anywhere in the app. The tester had a valid session cookie from a prior login and could not clear it, making auth guard appear broken."
+  artifacts:
+  - path: "src/app/login/actions.ts"
+    issue: "logoutAction implemented but never exposed to the UI"
+  - path: "src/components/layout/MobileNav.tsx"
+    issue: "No logout button present"
+    missing:
+  - "Add a logout button to MobileNav or the app header that calls logoutAction"
+    debug_session: ".planning/debug/auth-redirect-missing.md"
 
 - truth: "Edit drawer opens pre-filled with all existing wine fields"
   status: failed
   reason: "User reported: many of the required fields were not pre filled"
   severity: major
   test: 7
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "React Hook Form's defaultValues are only read once during useForm() initialization. WineDrawer renders WineForm before useLiveQuery resolves (undefined first), so the form initializes with empty fallbacks. When Dexie resolves with the real wine data, WineForm has no useEffect + form.reset() to re-initialize. Additionally, type and format Select components use uncontrolled defaultValue instead of controlled value, so they wouldn't update even if reset() were called."
+  artifacts:
+  - path: "src/components/wine/WineDrawer.tsx"
+    issue: "Renders WineForm before useLiveQuery resolves, passing undefined as defaultValues on first render"
+  - path: "src/components/wine/WineForm.tsx"
+    issue: "No useEffect + form.reset() for async defaultValues; type and format selects use uncontrolled defaultValue instead of controlled value"
+    missing:
+  - "Add useEffect in WineForm that calls form.reset(defaultValues) when defaultValues changes from undefined to a real wine object (or gate WineForm mount in WineDrawer until editingWine resolves)"
+  - "Change type and format Select components from defaultValue={field.value} to value={field.value}"
+    debug_session: ".planning/debug/edit-form-prefill.md"
