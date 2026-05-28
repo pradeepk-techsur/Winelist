@@ -22,7 +22,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 ## Phase Details
 
 ### Phase 1: Core Inventory
-**Status**: awaiting verify
+**Status**: In Progress
 **Goal**: Users can manage their complete wine collection — adding, viewing, editing, and deleting wine records — from a responsive mobile-friendly interface
 **Depends on**: Nothing (first phase)
 **Requirements**: INV-01, INV-02, INV-03, INV-04, INV-05, INV-06, MOB-01
