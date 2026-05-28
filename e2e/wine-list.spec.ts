@@ -5,7 +5,9 @@ async function login(page: Page) {
   await page.goto("/login");
   // Use default dev credentials from .env.local or fallback
   await page.getByLabel(/username/i).fill(process.env.AUTH_USERNAME ?? "admin");
-  await page.getByLabel(/password/i).fill(process.env.AUTH_PASSWORD ?? "changeme");
+  await page
+    .getByLabel(/password/i)
+    .fill(process.env.AUTH_PASSWORD ?? "changeme");
   await page.getByRole("button", { name: /sign in/i }).click();
   await page.waitForURL("/cellar");
 }
@@ -14,7 +16,9 @@ test.describe("Wine list", () => {
   test("authenticated user sees cellar page", async ({ page }) => {
     await login(page);
     await expect(page).toHaveURL("/cellar");
-    await expect(page.getByRole("heading", { name: /my cellar/i })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /my cellar/i }),
+    ).toBeVisible();
   });
 
   test("bottom navigation is visible", async ({ page }) => {
@@ -45,9 +49,37 @@ test.describe("Wine list", () => {
     expect(hasError).toBe(0);
   });
 
-  test("skeleton loading state appears (briefly) before list", async ({ page }) => {
+  test("skeleton loading state appears (briefly) before list", async ({
+    page,
+  }) => {
     await login(page);
     // Check that page renders without crash — loading and data states both handled
-    await expect(page.getByRole("heading", { name: /my cellar/i })).toBeVisible();
+    await expect(
+      page.getByRole("heading", { name: /my cellar/i }),
+    ).toBeVisible();
+  });
+});
+
+test.describe("Logout flow", () => {
+  test("logout button redirects to /login", async ({ page }) => {
+    await login(page);
+    await page.waitForURL("**/cellar");
+    // Click the logout button (form submit with aria-label="Logout")
+    await page.click('[aria-label="Logout"]');
+    await page.waitForURL("**/login");
+    expect(page.url()).toContain("/login");
+  });
+
+  test("after logout, protected route redirects to /login", async ({
+    page,
+  }) => {
+    await login(page);
+    await page.waitForURL("**/cellar");
+    await page.click('[aria-label="Logout"]');
+    await page.waitForURL("**/login");
+    // Now try to access protected route directly
+    await page.goto("/cellar");
+    await page.waitForURL("**/login");
+    expect(page.url()).toContain("/login");
   });
 });
