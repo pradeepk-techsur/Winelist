@@ -20,8 +20,10 @@ export function WineDrawer() {
   // useLiveQuery returns undefined while loading, then the value
   const editingWine = useLiveQuery<LocalWine | undefined>(
     () =>
-      editingWineId ? dexieDb.wines.get(editingWineId) : Promise.resolve(undefined),
-    [editingWineId]
+      editingWineId
+        ? dexieDb.wines.get(editingWineId)
+        : Promise.resolve(undefined),
+    [editingWineId],
   );
 
   const isEdit = Boolean(editingWineId);
@@ -35,6 +37,9 @@ export function WineDrawer() {
     closeDrawer();
   };
 
+  // Gate: do not render WineForm until editingWine has resolved from undefined
+  const isLoading = isEdit && editingWine === undefined;
+
   return (
     <Drawer open={isDrawerOpen} onOpenChange={(open) => !open && closeDrawer()}>
       <DrawerContent className="bg-[#1a0a0a] border-white/10 max-h-[92vh]">
@@ -44,12 +49,18 @@ export function WineDrawer() {
           </DrawerTitle>
         </DrawerHeader>
         <div className="px-4 pb-8 overflow-y-auto">
-          <WineForm
-            defaultValues={editingWine ?? undefined}
-            onSubmit={handleSubmit}
-            onCancel={closeDrawer}
-            isEdit={isEdit}
-          />
+          {isLoading ? (
+            <div className="flex items-center justify-center py-12 text-white/40">
+              Loading…
+            </div>
+          ) : (
+            <WineForm
+              defaultValues={editingWine ?? undefined}
+              onSubmit={handleSubmit}
+              onCancel={closeDrawer}
+              isEdit={isEdit}
+            />
+          )}
         </div>
       </DrawerContent>
     </Drawer>

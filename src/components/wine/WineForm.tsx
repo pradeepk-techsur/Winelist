@@ -20,7 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown } from "lucide-react";
 import type { LocalWine } from "@/lib/dexie/db";
 
@@ -40,8 +40,28 @@ interface WineFormProps {
   isEdit?: boolean;
 }
 
-export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineFormProps) {
-  const [showOptional, setShowOptional] = useState(false);
+export function WineForm({
+  defaultValues,
+  onSubmit,
+  onCancel,
+  isEdit,
+}: WineFormProps) {
+  const [showOptional, setShowOptional] = useState(() => {
+    if (!defaultValues) return false;
+    return !!(
+      defaultValues.region ||
+      defaultValues.country ||
+      defaultValues.varietal ||
+      defaultValues.appellation ||
+      defaultValues.storageLocation ||
+      defaultValues.purchasePrice ||
+      defaultValues.purchaseDate ||
+      defaultValues.purchaseSource ||
+      defaultValues.drinkFrom ||
+      defaultValues.drinkBy ||
+      defaultValues.notes
+    );
+  });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<WineFormValues>({
@@ -67,6 +87,31 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
       notes: defaultValues?.notes ?? null,
     },
   });
+
+  // Re-initialize form when defaultValues changes (defensive reset for async defaultValues)
+  useEffect(() => {
+    if (defaultValues) {
+      form.reset({
+        name: defaultValues.name ?? "",
+        producer: defaultValues.producer ?? "",
+        vintage: defaultValues.vintage ?? null,
+        type: defaultValues.type ?? "red",
+        varietal: defaultValues.varietal ?? null,
+        region: defaultValues.region ?? null,
+        appellation: defaultValues.appellation ?? null,
+        country: defaultValues.country ?? null,
+        quantity: defaultValues.quantity ?? 1,
+        format: defaultValues.format ?? "750ml",
+        storageLocation: defaultValues.storageLocation ?? null,
+        purchasePrice: defaultValues.purchasePrice ?? null,
+        purchaseDate: defaultValues.purchaseDate ?? null,
+        purchaseSource: defaultValues.purchaseSource ?? null,
+        drinkFrom: defaultValues.drinkFrom ?? null,
+        drinkBy: defaultValues.drinkBy ?? null,
+        notes: defaultValues.notes ?? null,
+      });
+    }
+  }, [defaultValues]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleSubmit = async (data: WineFormValues) => {
     setIsSubmitting(true);
@@ -131,7 +176,7 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
                   <FormLabel className="text-white/80">
                     Type <span className="text-red-400">*</span>
                   </FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-white/5 border-white/20 text-white">
                         <SelectValue placeholder="Type" />
@@ -171,7 +216,7 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
                       value={field.value ?? ""}
                       onChange={(e) =>
                         field.onChange(
-                          e.target.value ? parseInt(e.target.value, 10) : null
+                          e.target.value ? parseInt(e.target.value, 10) : null,
                         )
                       }
                     />
@@ -212,7 +257,10 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-white/80">Format</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value ?? "750ml"}>
+                  <Select
+                    onValueChange={field.onChange}
+                    value={field.value ?? "750ml"}
+                  >
                     <FormControl>
                       <SelectTrigger className="bg-white/5 border-white/20 text-white">
                         <SelectValue placeholder="750ml" />
@@ -220,7 +268,11 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
                     </FormControl>
                     <SelectContent className="bg-[#1a0a0a] border-white/20">
                       {["375ml", "750ml", "1.5L", "3L", "6L"].map((f) => (
-                        <SelectItem key={f} value={f} className="text-white focus:bg-white/10">
+                        <SelectItem
+                          key={f}
+                          value={f}
+                          className="text-white focus:bg-white/10"
+                        >
                           {f}
                         </SelectItem>
                       ))}
@@ -242,7 +294,9 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
           <ChevronDown
             className={`w-4 h-4 transition-transform ${showOptional ? "rotate-180" : ""}`}
           />
-          {showOptional ? "Hide optional details" : "Add more details (optional)"}
+          {showOptional
+            ? "Hide optional details"
+            : "Add more details (optional)"}
         </button>
 
         {showOptional && (
@@ -333,7 +387,9 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
               name="storageLocation"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white/80">Storage Location</FormLabel>
+                  <FormLabel className="text-white/80">
+                    Storage Location
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g. Cellar Rack A, Row 2"
@@ -354,7 +410,9 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
                 name="purchasePrice"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white/80">Purchase Price</FormLabel>
+                    <FormLabel className="text-white/80">
+                      Purchase Price
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -366,7 +424,7 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
                         value={field.value ?? ""}
                         onChange={(e) =>
                           field.onChange(
-                            e.target.value ? parseFloat(e.target.value) : null
+                            e.target.value ? parseFloat(e.target.value) : null,
                           )
                         }
                       />
@@ -380,7 +438,9 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
                 name="purchaseDate"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel className="text-white/80">Purchase Date</FormLabel>
+                    <FormLabel className="text-white/80">
+                      Purchase Date
+                    </FormLabel>
                     <FormControl>
                       <Input
                         type="date"
@@ -401,7 +461,9 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
               name="purchaseSource"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-white/80">Purchase Source</FormLabel>
+                  <FormLabel className="text-white/80">
+                    Purchase Source
+                  </FormLabel>
                   <FormControl>
                     <Input
                       placeholder="e.g. Total Wine, Winery direct"
@@ -497,8 +559,8 @@ export function WineForm({ defaultValues, onSubmit, onCancel, isEdit }: WineForm
             {isSubmitting
               ? "Saving…"
               : isEdit
-              ? "Save Changes"
-              : "Add to Cellar"}
+                ? "Save Changes"
+                : "Add to Cellar"}
           </Button>
         </div>
       </form>
